@@ -3,6 +3,7 @@ import { Client, Databases, ID, Query } from "appwrite";
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
 const COLLECTION_ID = import.meta.env.VITE_APPWRITE_COLLECTION_ID;
 const PROJECT_ID = import.meta.env.VITE_APPWRITE_PROJECT_ID;
+const REVIEW_COLLECTION_ID = import.meta.env.VITE_APPWRITE_REVIEW_COLLECTION_ID;
 
 const client = new Client().setEndpoint('https://nyc.cloud.appwrite.io/v1').setProject(PROJECT_ID)
 
@@ -41,4 +42,20 @@ export const getTrendingMovies = async () => {
     } catch(error){
         console.error('Error getting trending movies.', error)
     }
+}
+export const createReviews = async (movieId, name, rating, review) => {
+    try{
+        const result = await database.createDocument(
+            DATABASE_ID, REVIEW_COLLECTION_ID, ID.unique(), {
+                movie_id: movieId,
+                name,
+                rating,
+                review_text: review
+            }
+        )
+        return result
+    }catch(e){
+        console.error('Error Fetching Reviews:', e)
+    }
+
 }
